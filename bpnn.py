@@ -168,15 +168,15 @@ class BPNeuralNetwork:
 
     def train(self, cases, labels, limit=10000, learn=0.05, correct=0.1):
         for j in range(limit):
-            print(j)
             error = 0.0
             for i in range(len(cases)):
                 label = labels[i]
                 case = cases[i]
                 error += self.back_propagate(case, label, learn, correct)
+            print(j, error)
 
     def test(self):
-        savefile = "bpnn-save/1023-100-10-100.json"
+        savefile = "bpnn-save/1023-33-10-1000.json"
         cases = []
         labels = []
         trainingFileList = os.listdir('testDigits')
@@ -189,15 +189,17 @@ class BPNeuralNetwork:
             cases.append(img2vector('testDigits/%s' % fileNameStr))
 
         if os.path.exists(savefile) == False:
-            self.setup(1023, 100, 10)
-            self.train(cases, labels, 100, 0.05, 0.1)
+            self.setup(1023, 33, 10)
+            self.train(cases, labels, 1000, 0.05, 0.1)
             self.save(savefile)
         else :
             self.load(savefile)
 
         for i in range(len(cases)):
             print("input: ", vector2num(labels[i]))
-            print("output: ", vector2num(self.predict(cases[i])))
+            vec = self.predict(cases[i])
+            print("output: ", vector2num(vec))
+            print(vec)
 
 
 nn = BPNeuralNetwork()
